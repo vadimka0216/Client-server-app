@@ -1,0 +1,13 @@
+C:\Users\Вадим\Desktop\Учеба\5 семестр\Кульков\Курсовая\Project1\Project1\bin\Debug\Project1.exe.config
+C:\Users\Вадим\Desktop\Учеба\5 семестр\Кульков\Курсовая\Project1\Project1\obj\Debug\Project1.csprojResolveAssemblyReference.cache
+C:\Users\Вадим\Desktop\Учеба\5 семестр\Кульков\Курсовая\Project1\Project1\obj\Debug\Project1.Properties.Resources.resources
+C:\Users\Вадим\Desktop\Учеба\5 семестр\Кульков\Курсовая\Project1\Project1\obj\Debug\Project1.csproj.GenerateResource.Cache
+C:\Users\Вадим\Desktop\Учеба\5 семестр\Кульков\Курсовая\Project1\Project1\bin\Debug\Project1.exe
+C:\Users\Вадим\Desktop\Учеба\5 семестр\Кульков\Курсовая\Project1\Project1\bin\Debug\Project1.pdb
+C:\Users\Вадим\Desktop\Учеба\5 семестр\Кульков\Курсовая\Project1\Project1\obj\Debug\Project1.exe
+C:\Users\Вадим\Desktop\Учеба\5 семестр\Кульков\Курсовая\Project1\Project1\obj\Debug\Project1.pdb
+C:\Users\Вадим\Desktop\Учеба\5 семестр\Кульков\Курсовая\Project1\Project1\obj\Debug\Project1.StartMenu.resources
+C:\Users\Вадим\Desktop\Учеба\5 семестр\Кульков\Курсовая\Project1\Project1\obj\Debug\Project1.FormViewer.resources
+C:\Users\Вадим\Desktop\Учеба\5 семестр\Кульков\Курсовая\Project1\Project1\obj\Debug\Project1.FormEdit.resources
+C:\Users\Вадим\Desktop\Учеба\5 семестр\Кульков\Курсовая\Project1\Project1\obj\Debug\Project1.MenuForm.resources
+C:\Users\Вадим\Desktop\Учеба\5 семестр\Кульков\Курсовая\Project1\Project1\obj\Debug\Project1.DlgViewerSortOwners.resources
