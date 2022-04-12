@@ -1,0 +1,133 @@
+--create database coursework
+use coursework;
+--create table land_plot(id int IDENTITY PRIMARY KEY, _name nvarchar(MAX), _square float, date_reg date);
+--create table owners(id int IDENTITY PRIMARY KEY, FIO nvarchar(MAX), date_of_birth date, partner_FK int);
+--create table real_estate(id int IDENTITY PRIMARY KEY, _name nvarchar(MAX), date_reg date, address nvarchar(MAX), _type nvarchar(MAX), id_land_plot int NOT NULL);
+--create table directory(id int IDENTITY PRIMARY KEY, id_owner int NOT NULL, id_estate int /*unique*/ NOT NULL, date_contract date, price float);
+
+/*CREATE PROCEDURE Add_land_plot(@_name nvarchar(MAX), @_square float, @date_reg date)
+	AS INSERT INTO land_plot (_name, _square, date_reg) VALUES (@_name, @_square, @date_reg);
+CREATE PROCEDURE Upd_land_plot(@id int, @_name nvarchar(MAX), @_square float, @date_reg date)
+	AS UPDATE land_plot SET _name=@_name, _square=@_square, date_reg=@date_reg WHERE land_plot.id=@id;
+	
+CREATE PROCEDURE Del_land_plot(@id int)
+	AS DELETE land_plot WHERE land_plot.id=@id;
+	
+
+CREATE PROCEDURE Add_owners(@FIO nvarchar(MAX), @date_of_birth date, @partner_FK int)
+	AS INSERT INTO owners(FIO, date_of_birth, partner_FK) VALUES (@FIO, @date_of_birth, @partner_FK);
+	
+CREATE PROCEDURE Upd_owners(@id int, @FIO nvarchar(MAX), @date_of_birth date, @partner_FK int)
+	AS UPDATE owners SET FIO=@FIO, date_of_birth=@date_of_birth, partner_FK=@partner_FK WHERE owners.id=@id;
+CREATE PROCEDURE Del_owners(@id int)
+	AS DELETE owners WHERE owners.id=@id;
+
+
+CREATE PROCEDURE Add_real_estate(@name nvarchar(MAX), @date_reg date, @_address nvarchar(MAX), @_type nvarchar(MAX), @id_land_plot int)
+	AS INSERT INTO real_estate(_name, date_reg, address, _type, id_land_plot) VALUES (@name, @date_reg, @_address, @_type, @id_land_plot);
+CREATE PROCEDURE Upd_real_estate(@id int, @name nvarchar(MAX), @date_reg date, @_address nvarchar(MAX), @_type nvarchar(MAX), @id_land_plot int)
+	AS UPDATE real_estate SET _name=@name, date_reg=@date_reg, address=@_address, _type=@_type, id_land_plot=@id_land_plot WHERE real_estate.id=@id;
+CREATE PROCEDURE Del_real_estate(@id int)
+	AS DELETE real_estate WHERE real_estate.id=@id;
+
+CREATE PROCEDURE Add_directory(@id_owner int, @id_estate int, @date_contract date, @price float)
+	AS INSERT INTO directory(id_owner, id_estate, date_contract, price) VALUES (@id_owner, @id_estate, @date_contract, @price);
+CREATE PROCEDURE Upd_directory(@id int, @id_owner int, @id_estate int, @date_contract date, @price float)
+	AS UPDATE directory SET id_owner=@id_owner, id_estate=@id_estate, date_contract=@date_contract, price=@price WHERE directory.id=@id;
+CREATE PROCEDURE Del_directory(@id int)
+	AS DELETE directory WHERE directory.id=@id;
+	*/
+
+--Создание триггеров:
+/*
+CREATE TRIGGER onChangeEstate ON real_estate AFTER INSERT, UPDATE--DROP TRIGGER onChangeEstate;
+	AS
+	UPDATE real_estate SET date_reg = GETDATE() WHERE (real_estate.id = (SELECT inserted.id FROM inserted));
+
+CREATE TRIGGER onDelEstate  ON real_estate AFTER DELETE
+	AS
+	DELETE directory WHERE directory.id_estate=(SELECT inserted.id FROM inserted)
+*/
+
+--2.b СОЗДАНИЕ ПРЕДСТАВЛЕНИЯ:
+--CREATE /*INSERT*/ VIEW top_owners AS
+--SELECT owners.id,owners.FIO,owners.date_of_birth, (SELECT SUM(directory.price) FROM directory WHERE owners.id=directory.id_owner OR owners.partner_FK=directory.id_owner) AS Sum_Estate FROM owners;
+
+
+--Создание индексов для быстродействия поиска:
+/*
+--оптимизация задания 2.c.3
+--ALTER TABLE real_estate ALTER COLUMN _type nvarchar(50);
+--drop index IX_real_estate_Type ON real_estate;
+CREATE NONCLUSTERED INDEX IX_real_estate_Type on real_estate (_type, id_land_plot);
+*/
+
+
+--выполнение задания 6
+/*
+CREATE PROCEDURE Try_ChangeEstate_LandPlot(@id int, @id_land_plot int) AS
+		BEGIN TRANSACTION MyTransaction1
+			UPDATE real_estate SET id_land_plot=@id_land_plot WHERE real_estate.id=@id
+			DECLARE @counter int=(SELECT COUNT(*) FROM real_estate WHERE real_estate.id_land_plot=@id_land_plot)
+			IF @counter>5 ROLLBACK TRANSACTION MyTransaction1
+			ELSE
+			COMMIT TRANSACTION MyTransaction1
+
+--EXECUTE Try_ChangeEstate_LandPlot @id=4,@id_land_plot=2;--2
+		*/
+
+--Upd_directory(@id int, @id_owner int, @id_estate int, @date_contract date, @price float)
+--AS UPDATE directory SET id_owner=@id_owner, id_estate=@id_estate, date_contract=@date_contract, price=@price WHERE directory.id=@id;
+
+/*
+CREATE PROCEDURE Upd_directory_new(@id_edit int, @id_owner int, @id_estate int, @date_contract date, @price float) AS
+	DECLARE my_cursor CURSOR FOR SELECT id FROM directory;
+	OPEN my_cursor
+	DECLARE @id INT;
+	FETCH NEXT FROM my_cursor INTO @id;
+	WHILE @@FETCH_STATUS = 0
+	BEGIN
+		IF @id_edit = @id
+		UPDATE directory SET id_owner=@id_owner, id_estate=@id_estate, date_contract=@date_contract, price=@price WHERE directory.id=@id;
+		FETCH NEXT FROM my_cursor INTO @id;
+	END
+	CLOSE my_cursor;
+	DEALLOCATE my_cursor;
+
+*/
+
+
+/*
+--Задание 8.
+--Табличная функция
+CREATE FUNCTION getEstates() RETURNS TABLE AS
+RETURN (SELECT real_estate.id,real_estate._name,real_estate.date_reg,real_estate.address,real_estate._type, land_plot._name as name_land_plot, land_plot._square, land_plot.date_reg as date_land_plot FROM real_estate JOIN land_plot ON (land_plot.id=real_estate.id_land_plot));
+
+SELECT * FROM getEstates();
+--скалярная функция
+CREATE FUNCTION getCountBusinesses(@id int) RETURNS INT AS
+BEGIN
+	DECLARE @count int=(SELECT COUNT(*) FROM directory WHERE directory.id_owner=@id)
+	RETURN @count;
+END
+*/
+
+/*
+--задание 9.
+CREATE LOGIN [Admin] WITH PASSWORD='Admin',
+DEFAULT_DATABASE=[coursework], DEFAULT_LANGUAGE=[русский], CHECK_EXPIRATION=OFF, CHECK_POLICY=OFF
+
+CREATE USER [Admin] FOR LOGIN [Admin] WITH DEFAULT_SCHEMA=[guest]
+ALTER ROLE [db_datareader] ADD MEMBER [Admin]
+ALTER ROLE [db_owner] ADD MEMBER [Admin]
+*/
+
+/* задание 2.c.1
+SELECT owners.FIO, real_estate._name, (SELECT COUNT(*) FROM owners) ofAllOwners, 
+(SELECT COUNT(*) FROM directory as select_directory WHERE owners.id=select_directory.id_owner) CountOwners 
+FROM  directory JOIN owners ON (directory.id_owner=owners.id) JOIN real_estate ON (directory.id_estate=real_estate.id);
+*/
+/* задание 2.c.2
+SELECT _owners.id, _owners.FIO, _owners.date_of_birth FROM (SELECT * FROM owners) _owners WHERE 
+(SELECT COUNT(*) FROM (SELECT * FROM directory WHERE _owners.id=directory.id_owner) _table) >2
+*/
